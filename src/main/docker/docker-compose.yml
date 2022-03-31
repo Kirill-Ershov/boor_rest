@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  app:
+    image: 'cr.yandex/crp5avlt3vkghjafllia/boot_rest:version1.0'
+    ports:
+      - 8080:8080
+    build:
+      context: /Users/k/IdeaProjects/boot_rest
+    container_name: java_app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/docker_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+
+  db:
+    image: 'cr.yandex/crp5avlt3vkghjafllia/mysql:latest'
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=docker_db
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+    driver: local
